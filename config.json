@@ -1,0 +1,6 @@
+{
+    "version": 1.0,
+    "name": "Node File Share",
+    "secret": "YouKnowWhatThisIs",
+    "debug": true
+}
