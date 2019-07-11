@@ -7,7 +7,8 @@ var storage = multer.diskStorage({
       cb(null, './uploads')
     },
     filename: function (req, file, cb) {
-      cb(null, shortid.generate() + '_' + file.originalname.replace('.', '-'))
+      cb(null, shortid.generate() + '_' + new Date().getTime() + '_' + file.originalname.substr(0, file.originalname.lastIndexOf(".")) + "_"+ file.originalname.substr(file.originalname.lastIndexOf(".") + "_".length)
+      )
     }
   })
 var upload = multer({ storage: storage })
@@ -19,8 +20,11 @@ function formatBytes(a,b){if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","
 
  app.post("/file/send", upload.single('fileupload'), function(req, res,next) { 
    /* some server side logic */
-   res.send("OK");
- });
+    if(config.debug){
+        console.log("[DEBUG] File Uploaded: " + req.file.filename + " (" + formatBytes(req.file.size,1) + ")")
+    }
+    res.send("Done!")
+});
 
 /* serves all the static files */
 app.use(express.static('public', {setHeaders: function(req, path, stat){
